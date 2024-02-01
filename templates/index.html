@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <title>Formulario de Pedidos</title>
+    <style>
+        h1 {
+            margin-bottom: 1px; /* Ajuste o valor conforme necessário para reduzir o espaço */
+        }
+    </style>
+<body>
+    <h1>Ações</h1>
+    <form action="/" method="post"></form><br>
+        <a href="/pedidos" style="text-decoration: none;">
+        <button style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border: none; border-radius: 20px;">Ver Pedidos</button>
+    </a>
+    </body>
+</html>
+<head>  
+    <style>
+        /* Adicionando estilos CSS */
+        #label-quantidade {
+            width: 300px;
+            display: inline-block;
+        }
+        #pago, #entregue {
+            transform: scale(2.5); /* Ajusta o tamanho do checkbox */
+        }
+        /* Adicionando estilos CSS */
+        label {
+            margin-bottom: 5px; /* Adiciona margem abaixo de cada label */
+            }
+        input[type="text"],
+        input[type="number"]{
+            margin-bottom: 10px; /* Adiciona margem abaixo de cada input */
+            width: 20%; /* Faz com que os inputs ocupem toda a largura disponível */
+            box-sizing: border-box; /* Inclui a largura do padding e da borda no total da largura */
+        } 
+                input[type="checkbox"] {
+            margin-bottom: 10px; /* Adiciona margem abaixo de cada input */
+            width: 5%; /* Faz com que os inputs ocupem toda a largura disponível */
+            box-sizing: border-box; /* Inclui a largura do padding e da borda no total da largura */
+        }   
+        #entregue,#quantidade,#valor {
+    margin-bottom: 20px;
+        }
+        
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Recupera o nome do responsável do localStorage
+            var responsavel = localStorage.getItem("responsavel");
+
+            // Se o nome do responsável estiver armazenado, preenche o campo
+            if (responsavel) {
+                document.getElementById("responsavel").value = responsavel;
+            }
+
+            // Adiciona um ouvinte de evento ao campo de quantidade
+            document.getElementById("quantidade").addEventListener("input", function () {
+                // Obtém o valor da quantidade
+                var quantidade = parseFloat(this.value);
+
+                // Verifica se a quantidade é um número válido
+                if (!isNaN(quantidade)) {
+                    // Calcula o valor total e define no campo de valor
+                    document.getElementById("valor").value = (quantidade * 55.00).toFixed(2);
+                } else {
+                    // Se a quantidade não for válida, define o valor como vazio
+                    document.getElementById("valor").value = "";
+                }
+            });
+
+            // Adiciona um ouvinte de evento ao campo de responsável para salvar no localStorage
+            document.getElementById("responsavel").addEventListener("input", function () {
+                localStorage.setItem("responsavel", this.value);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Formulário de Pedido</h1>
+    <form action="/" method="post">
+        <label for="responsavel">Responsável:</label><br>
+        <input type="text" id="responsavel" name="responsavel" required size="30" style="margin-top: 2px;"><br>
+        
+        <label for="nome">Nome Completo:</label><br>
+        <input type="text" id="nome" name="nome" required size="30"><br>
+
+        <label for="endereco">Endereço:</label><br>
+        <input type="text" id="endereco" name="endereco" required size="30"><br>
+
+        <label for="numero">Número da Casa:</label><br>
+        <input type="text" id="numero" name="numero" required size="30"><br>
+
+        <label for="complemento">Complemento:</label><br>
+        <input type="text" id="complemento" name="complemento" required size="30" ><br>
+
+        <label for="quantidade">Quantidade:</label><br>
+        <input type="number" id="quantidade" name="quantidade" required><br>
+
+        <label for="valor">Valor Total a Pagar:</label>
+        <input type="valor" id="valor" name="valor" size="5" ><br>
+
+        <label for="entregue">Entregue?</label>
+        <input type="checkbox" id="entregue" name="entregue" value="Sim"><br>
+
+        <label for="pago">Pago?</label>
+        <input type="checkbox" id="pago" name="pago" value="Sim"><br>
+
+    </div>
+    <br>
+        <input type="submit" value="Salvar" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border: none; border-radius: 5px;">
+    </form>
+</body>
+</html>

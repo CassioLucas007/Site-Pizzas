@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pedido</title>
+    <style>
+        /* Adicionando estilos CSS */
+        #label-quantidade {
+            width: 300px;
+            display: inline-block;
+        }
+        #pago,#entregue {
+            transform: scale(2.5); /* Ajusta o tamanho do checkbox */
+        }
+        /* Adicionando estilos CSS */
+        label {
+            margin-bottom: 5px; /* Adiciona margem abaixo de cada label */
+        }
+        input[type="text"],
+        input[type="number"]{
+            margin-bottom: 10px; /* Adiciona margem abaixo de cada input */
+            width: 20%; /* Faz com que os inputs ocupem toda a largura disponível */
+            box-sizing: border-box; /* Inclui a largura do padding e da borda no total da largura */
+        }
+        input[type="checkbox"] {
+            margin-bottom: 10px; /* Adiciona margem abaixo de cada input */
+            width: 5%; /* Faz com que os inputs ocupem toda a largura disponível */
+            box-sizing: border-box; /* Inclui a largura do padding e da borda no total da largura */
+        }
+        /* Adicionando estilos CSS aos botões */
+        #pago,#valor,#entregue {
+            margin-bottom: 20px;
+        }
+    .botao {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border: none;
+        border-radius: 20px;
+    }
+    </style>
+</head>
+<body>
+    <h1>Editar Pedido</h1>
+    <form action="/editar/{{ index }}" method="post">
+        
+        <label for="responsavel">Responsável:</label><br>
+        <input type="text" id="responsavel" name="responsavel" value="{{ pedido['Responsável'] }}" required>
+        <br>
+        <label for="nome">Nome Completo:</label><br>
+        <input type="text" id="nome" name="nome" value="{{ pedido['Nome Completo'] }}"><br>
+        
+        <label for="endereco">Endereço:</label><br>
+        <input type="text" id="endereco" name="endereco" value="{{ pedido['Endereço'] }}"><br>
+        
+        <label for="numero">Número da Casa:</label><br>
+        <input type="text" id="numero" name="numero" value="{{ pedido['Número da Casa'] }}"><br>
+        
+        <label for="complemento">Complemento:</label><br>
+        <input type="text" id="complemento" name="complemento" value="{{ pedido['Complemento'] }}"><br>
+        
+        <label for="quantidade" id="label-quantidade">Quantidade:</label><br>
+        <input type="text" id="quantidade" name="quantidade" value="{{ pedido['Quantidade'] }}"><br>
+
+        <label for="valor">Valor total:</label>
+        <input type="valor" id="valor" name="valor" size="5" ><br>
+        
+        <label for="pago">Pago?</label>
+        <input type="checkbox" id="pago" name="pago" value="Sim" {% if pedido['Pago?'] == 'Sim' %} checked {% endif %}><br>
+        
+        <label for="entregue">Entregue?</label>
+        <input type="checkbox" id="entregue" name="entregue" value="Sim" {% if pedido['Entregue?'] == 'Sim' %} checked {% endif %}><br>
+
+
+        <input type="submit" value="Salvar Alterações" class="botao">
+    </form>
+    <br>
+    <a href="/pedidos"><button class="botao">Cancelar</button></a>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Chama a função para calcular o valor inicial ao carregar a página
+            calcularValor();
+    
+            // Adiciona um ouvinte de evento ao campo de quantidade
+            document.getElementById("quantidade").addEventListener("input", function () {
+                // Chama a função para calcular o valor ao alterar a quantidade
+                calcularValor();
+            });
+    
+            // Função para calcular o valor com base na quantidade
+            function calcularValor() {
+                // Obtém o valor da quantidade
+                var quantidade = parseFloat(document.getElementById("quantidade").value);
+    
+                // Verifica se a quantidade é um número válido
+                if (!isNaN(quantidade)) {
+                    // Calcula o valor total e define no campo de valor
+                    document.getElementById("valor").value = (quantidade * 55.00).toFixed(2);
+                } else {
+                    // Se a quantidade não for válida, define o valor como vazio
+                    document.getElementById("valor").value = "";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatorio Dos Pedidos</title>
+</head>
+<body>
+    <p style="display:inline-block;size: 60px;padding-right: 10px;font-size: 30pt;margin-bottom: 1px;margin-right: 20px;background-color: darkblue;color: #fff;">Total De Pedidos: {% if pedidos is not none %}{{ pedidos|length }}{% else %}0{% endif %}</p>
+    <p id="soma-valor-total" style="display:inline-block;size: 60px;padding-right: 10px;font-size: 30pt;margin-bottom: 1px;background-color: darkblue;color: #fff">Soma do Valor Total: {{ valor_total }}</p>
+
+    <div style="margin-bottom: 20px;">
+        <label for="pesquisar" style="display: inline-block;padding: 5px;font-size: 18pt;margin-top: 15px;font-style: oblique; border-radius: 20px;border-color: #fff;background-color: black; color: rgb(255, 255, 255);">Pesquisar relatório:</label>
+        <input type="text" id="pesquisar" name="pesquisar" style="margin-right: 15px; font-size: 15pt;margin-top: 15px;padding: 5px; border-radius: 20px;border-color: #fff;background-color: black;color: #fff;" onkeyup="filtrarPedidos()">
+        <a href="/" style="margin-top: 15px;display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 20px;">Voltar à tela inicial</a> <!-- Adicionando o botão para voltar à tela inicial -->
+    </div>
+    
+    <div>
+        <table id="tabelaPedidos" border="1">
+            <tr>
+                <th>Nome Completo</th>
+                <th>Endereço</th>
+                <th>Número da Casa</th>
+                <th>Complemento</th>
+                <th>Quantidade</th>
+                <th>Valor Total</th>
+                <th>Pago?</th>
+                <th>Entregue</th>
+                <th>Responsável</th>
+                
+                <th>Ações</th>
+            </tr>
+            {% if pedidos is not none %}
+                {% for indice, pedido in pedidos.iterrows() %}
+                    <tr>
+                        <td>{{ pedido['Nome Completo'] }}</td>
+                        <td>{{ pedido['Endereço'] }}</td>
+                        <td>{{ pedido['Número da Casa'] }}</td>
+                        <td>{{ pedido['Complemento'] }}</td>
+                        <td>{{ pedido['Quantidade'] }}</td>
+                        <td>{{ pedido['Valor Total'] }}</td>
+                        <td>{{ pedido['Pago?'] }}</td>
+                        <td>{{ pedido['Entregue?'] }}</td>
+                        <td>{{ pedido['Responsável'] }}</td>
+                        <td>
+                            <div style="display: flex;">
+                                <form action="/pedidos" method="post" style="margin-right: 10px;">
+                                    <input type="hidden" name="indice" value="{{ indice }}">
+                                    <button style="display: inline-block; padding: 5px 10px; background-color: #000f73; color: #fff; text-decoration: none; border-radius: 5px;" type="submit" name="action" value="excluir">Excluir</button>
+                                </form>
+                                <form action="/editar/{{ indice }}" method="get">
+                                    <button style="display: inline-block; padding: 5px 10px; background-color: #000f73; color: #fff; text-decoration: none; border-radius: 5px;" type="submit">Editar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+
+    <script>
+        function filtrarPedidos() {
+            var input, filtro, tabela, tr, td, i, j, txtValue;
+            input = document.getElementById("pesquisar");
+            filtro = input.value.toUpperCase();
+            tabela = document.getElementById("tabelaPedidos");
+            tr = tabela.getElementsByTagName("tr");
+    
+            for (i = 0; i < tr.length; i++) {
+                if (i === 0) { // Manter o cabeçalho sempre visível
+                    tr[i].style.display = "";
+                    continue;
+                }
+    
+                var mostrar = false;
+    
+                for (j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+                    td = tr[i].getElementsByTagName("td")[j];
+    
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filtro) > -1) {
+                            mostrar = true;
+                            break;
+                        }
+                    }
+                }
+    
+                if (mostrar) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+        // Script para calcular a soma do Valor Total e exibir em texto
+        window.onload = function () {
+            calcularSomaValorTotal();
+        };
+
+        function calcularSomaValorTotal() {
+            var tabela = document.getElementById("tabelaPedidos");
+            var total = 0;
+
+            for (var i = 1; i < tabela.rows.length; i++) {
+                total += parseFloat(tabela.rows[i].cells[5].innerText); // Coluna "Valor Total"
+            }
+
+            // Exibir a soma em texto abaixo do título "Pedidos"
+            document.getElementById("soma-valor-total").innerText = "Soma do Valor Total: " + total.toFixed(2); // Arredondar para duas casas decimais
+        }
+    </script>
+    
+    
+</body>
+</html>
